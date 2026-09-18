@@ -7,7 +7,7 @@ No specific request, but only test on 2022.3.4, 2022.3.22, 2022.3.16
 
 1. Download github repo
     ```
-    git clone https://github.com/GodOfEGG/TaichiTeachingSystem_Student.git
+    git clone https://github.com/r13944003/TaichiTeachingSystem_Student.git
     ```
 
 2. Open unity hub -> Projects -> Add -> Add project from disk -> select the github repo
