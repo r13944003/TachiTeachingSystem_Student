@@ -1,0 +1,173 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace TaichiTeachingSystem
+{
+
+    // Motion Data Structure for original move(not modified)
+    [Serializable]
+    public class MuscleValues
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+        public float[] muscleValues;
+    }
+
+    // Used in ModifyValues, for checking which body part is modified by teacher 
+    public enum AvatarBodyPartList{
+        HIP,  // 0
+        SPINE, // 1
+        SPINE1, // 2
+        SPINE2, // 3
+        NECK, // 4
+        HEAD, //5
+        LEFT_SHOULDER, // 6
+        LEFT_ARM, // 7
+        LEFT_FOREARM, // 8
+        LEFT_HAND, // 9
+        RIGHT_SHOULDER, // 10
+        RIGHT_ARM, // 11
+        RIGHT_FOREARM, // 12
+        RIGHT_HAND, // 13
+        LEFT_UPLEG, // 14
+        LEFT_LEG, // 15
+        LEFT_FOOT, // 16
+        RIGHT_UPLEG, // 17
+        RIGHT_LEG, // 18
+        RIGHT_FOOT //19
+
+    }
+
+
+    // MotionData Structure for modified data
+    // Additional Data:
+    //                  frameID: the avatar move of which frame is modified
+    //                  modifiedBodyParts: which body part is modified, for indicator usage
+    [Serializable]
+    public class ModifyValues
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+        public float[] muscleValues;
+        public int frameID;
+        public List<AvatarBodyPartList> modifiedBodyParts;
+    }
+
+    [Serializable]
+    public class MotionData
+    {
+        public List<MuscleValues> motionFrames = new();
+        public List<ModifyValues> modifiedFrames = new();
+        public int userId;
+        public int coachId;
+    }
+
+
+}
+
+
+
+/* 95個Muscles對應
+    List<string> tmp=new ();
+    for(int i=0;i<HumanTrait.MuscleName.Length;++i)
+        tmp.Add($"[{i}]{HumanTrait.MuscleName[i]}");
+    Debug.Log(string.Join("\n", tmp));
+
+    [0]Spine Front-Back
+    [1]Spine Left-Right
+    [2]Spine Twist Left-Right
+    [3]Chest Front-Back
+    [4]Chest Left-Right
+    [5]Chest Twist Left-Right
+    [6]UpperChest Front-Back
+    [7]UpperChest Left-Right
+    [8]UpperChest Twist Left-Right
+    [9]Neck Nod Down-Up
+    [10]Neck Tilt Left-Right
+    [11]Neck Turn Left-Right
+    [12]Head Nod Down-Up
+    [13]Head Tilt Left-Right
+    [14]Head Turn Left-Right
+    [15]Left Eye Down-Up
+    [16]Left Eye In-Out
+    [17]Right Eye Down-Up
+    [18]Right Eye In-Out
+    [19]Jaw Close
+    [20]Jaw Left-Right
+    [21]Left Upper Leg Front-Back
+    [22]Left Upper Leg In-Out
+    [23]Left Upper Leg Twist In-Out
+    [24]Left Lower Leg Stretch
+    [25]Left Lower Leg Twist In-Out
+    [26]Left Foot Up-Down
+    [27]Left Foot Twist In-Out
+    [28]Left Toes Up-Down
+    [29]Right Upper Leg Front-Back
+    [30]Right Upper Leg In-Out
+    [31]Right Upper Leg Twist In-Out
+    [32]Right Lower Leg Stretch
+    [33]Right Lower Leg Twist In-Out
+    [34]Right Foot Up-Down
+    [35]Right Foot Twist In-Out
+    [36]Right Toes Up-Down
+    [37]Left Shoulder Down-Up
+    [38]Left Shoulder Front-Back
+    [39]Left Arm Down-Up
+    [40]Left Arm Front-Back
+    [41]Left Arm Twist In-Out
+    [42]Left Forearm Stretch
+    [43]Left Forearm Twist In-Out
+    [44]Left Hand Down-Up
+    [45]Left Hand In-Out
+    [46]Right Shoulder Down-Up
+    [47]Right Shoulder Front-Back
+    [48]Right Arm Down-Up
+    [49]Right Arm Front-Back
+    [50]Right Arm Twist In-Out
+    [51]Right Forearm Stretch
+    [52]Right Forearm Twist In-Out
+    [53]Right Hand Down-Up
+    [54]Right Hand In-Out
+    [55]Left Thumb 1 Stretched
+    [56]Left Thumb Spread
+    [57]Left Thumb 2 Stretched
+    [58]Left Thumb 3 Stretched
+    [59]Left Index 1 Stretched
+    [60]Left Index Spread
+    [61]Left Index 2 Stretched
+    [62]Left Index 3 Stretched
+    [63]Left Middle 1 Stretched
+    [64]Left Middle Spread
+    [65]Left Middle 2 Stretched
+    [66]Left Middle 3 Stretched
+    [67]Left Ring 1 Stretched
+    [68]Left Ring Spread
+    [69]Left Ring 2 Stretched
+    [70]Left Ring 3 Stretched
+    [71]Left Little 1 Stretched
+    [72]Left Little Spread
+    [73]Left Little 2 Stretched
+    [74]Left Little 3 Stretched
+    [75]Right Thumb 1 Stretched
+    [76]Right Thumb Spread
+    [77]Right Thumb 2 Stretched
+    [78]Right Thumb 3 Stretched
+    [79]Right Index 1 Stretched
+    [80]Right Index Spread
+    [81]Right Index 2 Stretched
+    [82]Right Index 3 Stretched
+    [83]Right Middle 1 Stretched
+    [84]Right Middle Spread
+    [85]Right Middle 2 Stretched
+    [86]Right Middle 3 Stretched
+    [87]Right Ring 1 Stretched
+    [88]Right Ring Spread
+    [89]Right Ring 2 Stretched
+    [90]Right Ring 3 Stretched
+    [91]Right Little 1 Stretched
+    [92]Right Little Spread
+    [93]Right Little 2 Stretched
+    [94]Right Little 3 Stretched     
+    */
